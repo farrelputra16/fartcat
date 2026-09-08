@@ -1,252 +1,126 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-const FARTSYM = ['~', '^', '*', 'o', '.', '`'];
+const FARTSYM = ['~', '^', '*', 'o', '.'];
+
+const TIERS = [
+  { l: 'Minimum', v: '1M FARTCAT', r: 'Passive accumulation', icon: '>' },
+  { l: 'Medium', v: '10M FARTCAT', r: 'Enhanced reward rate', icon: '>>' },
+  { l: 'Whale', v: '100M FARTCAT', r: 'Max OTC priority', icon: '>>>' },
+];
 
 export const Rewards: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [particles, setParticles] = useState<Array<{id: number; x: number; y: number; dx: number; dy: number; char: string; color: string; size: number; opacity: number}>>([]);
-  const nextId = useRef(0);
-  const rafRef = useRef<number>(0);
-  const lastTimeRef = useRef<number>(0);
-  const runningRef = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
+  const raf = useRef(0);
+  const lt = useRef(0);
+  const run = useRef(false);
+  const [ps, setPs] = useState<Array<{id:number; x:number; y:number; dx:number; dy:number; char:string; color:string; sz:number; op:number}>>([]);
+  const nid = useRef(0);
 
-  const emitFart = () => {
-    const newParticles = [];
-    for (let i = 0; i < 20; i++) {
-      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.8;
-      const speed = 80 + Math.random() * 140;
-      newParticles.push({
-        id: nextId.current++,
-        x: 50 + (Math.random() - 0.5) * 10,
-        y: 55,
-        dx: Math.cos(angle) * speed,
-        dy: Math.sin(angle) * speed,
+  const emit = useCallback(() => {
+    const newP = Array.from({ length: 20 }, () => {
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.9;
+      const s = 90 + Math.random() * 150;
+      return { id: nid.current++, x: 50 + (Math.random() - 0.5) * 8, y: 55,
+        dx: Math.cos(a) * s, dy: Math.sin(a) * s,
         char: FARTSYM[Math.floor(Math.random() * FARTSYM.length)],
-        color: Math.random() > 0.5 ? '#00ff41' : '#ffb000',
-        size: 18 + Math.random() * 14,
-        opacity: 1,
-      });
-    }
-    setParticles(newParticles);
-    lastTimeRef.current = performance.now();
-    runningRef.current = true;
+        color: Math.random() > 0.5 ? 'var(--green)' : 'var(--amber)',
+        sz: 16 + Math.random() * 14, op: 1 };
+    });
+    setPs(newP);
+    lt.current = performance.now();
+    run.current = true;
     document.body.classList.add('shake');
     setTimeout(() => document.body.classList.remove('shake'), 300);
 
-    const animate = (now: number) => {
-      if (!runningRef.current) return;
-      const dt = Math.min((now - lastTimeRef.current) / 1000, 0.05);
-      lastTimeRef.current = now;
-      setParticles(prev => {
-        const updated = prev.map(p => ({
-          ...p,
-          x: p.x + p.dx * dt,
-          y: p.y + p.dy * dt,
-          dy: p.dy + 50 * dt,
-          dx: p.dx * (1 - 1.2 * dt),
-          opacity: Math.max(0, p.opacity - dt * 0.85),
-        })).filter(p => p.opacity > 0);
-        if (updated.length > 0) {
-          rafRef.current = requestAnimationFrame(animate);
-        }
-        return updated;
+    const tick = (now: number) => {
+      if (!run.current) return;
+      const dt = Math.min((now - lt.current) / 1000, 0.05);
+      lt.current = now;
+      setPs(prev => {
+        const u = prev.map(p => ({ ...p, x: p.x + p.dx * dt, y: p.y + p.dy * dt,
+          dy: p.dy + 50 * dt, dx: p.dx * (1 - 1.2 * dt), op: Math.max(0, p.op - dt * 0.85) }))
+          .filter(p => p.op > 0);
+        if (u.length) raf.current = requestAnimationFrame(tick);
+        return u;
       });
     };
-    rafRef.current = requestAnimationFrame(animate);
-
-    setTimeout(() => {
-      runningRef.current = false;
-      setParticles([]);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    }, 2000);
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(emitFart, 3000);
-    const interval = setInterval(emitFart, 5000);
-    return () => {
-      clearTimeout(timer);
-      clearInterval(interval);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
+    raf.current = requestAnimationFrame(tick);
+    setTimeout(() => { run.current = false; setPs([]); if (raf.current) cancelAnimationFrame(raf.current); }, 2200);
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.reveal').forEach((el, i) => {
-              setTimeout(() => el.classList.add('visible'), i * 120);
-            });
-          }
+    const t1 = setTimeout(emit, 2500);
+    const iv = setInterval(emit, 6000);
+    return () => { clearTimeout(t1); clearInterval(iv); if (raf.current) cancelAnimationFrame(raf.current); };
+  }, [emit]);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(e => {
+      if (e[0].isIntersecting) {
+        ref.current?.querySelectorAll('.reveal').forEach((el, i) => {
+          setTimeout(() => el.classList.add('v'), i * 100);
         });
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="section"
-      style={{
-        background: 'var(--surface)',
-        borderTop: '1px solid var(--border)',
-        borderBottom: '1px solid var(--border)',
-        position: 'relative',
-        overflow: 'hidden',
-        textAlign: 'center',
-      }}
-    >
-      {/* Ambient glow */}
-      <div aria-hidden="true" style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 800,
-        height: 400,
-        background: 'radial-gradient(ellipse, rgba(0,255,65,0.04) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
+    <section id="rewards" ref={ref} className="section">
+      <div className="container">
+        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
+          <div className="section-label reveal" style={{ justifyContent: 'center' }}>03 // OTC Reward Engine</div>
+          <h2 className="section-title reveal" style={{ transitionDelay: '90ms', marginBottom: 8 }}>
+            Hold <span style={{ color: 'var(--green)' }}>$FARTCAT</span>
+          </h2>
+          <h2 className="section-title reveal" style={{ transitionDelay: '150ms', fontSize: 'clamp(36px, 5vw, 56px)', color: 'var(--amber)', marginBottom: 16 }}>
+            Get <span style={{ color: 'var(--amber)' }}>$FARTCOIN</span>
+          </h2>
+          <p className="reveal section-body" style={{ transitionDelay: '210ms', margin: '0 auto 56px', textAlign: 'center' }}>
+            Every $FARTCAT holder receives $FARTCOIN rewards proportionally — no farming, no staking, no LP requirements. OTC distributes rewards on every block.
+          </p>
 
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="section-label reveal" style={{ justifyContent: 'center' }}>03 // OTC REWARD ENGINE</div>
-        <h2 className="section-title reveal" style={{ transitionDelay: '120ms', marginBottom: 8 }}>
-          HOLD <span style={{ color: 'var(--amber)' }}>$FARTCAT</span>
-        </h2>
-        <p className="section-title reveal" style={{ transitionDelay: '180ms', fontSize: 'clamp(40px, 6vw, 72px)', color: 'var(--primary)', marginBottom: 16 }}>
-          GET <span style={{ color: 'var(--amber)', textShadow: '0 0 20px rgba(255,176,0,0.4)' }}>$FARTCOIN</span>
-        </p>
-        <p className="reveal" style={{ transitionDelay: '240ms', fontFamily: 'var(--font-mono)', fontSize: 14, color: 'var(--text-dim)', maxWidth: 520, margin: '0 auto 48px', lineHeight: 1.8 }}>
-          The OTC mechanism ensures every $FARTCAT holder receives $FARTCOIN rewards proportionally. No farming. No staking. No LP requirements. Simply hold.
-        </p>
-
-        {/* Fart visual */}
-        <div
-          ref={containerRef}
-          className="reveal"
-          style={{
-            transitionDelay: '300ms',
-            position: 'relative',
-            display: 'inline-block',
-            marginBottom: 48,
-            cursor: 'default',
-          }}
-          onClick={emitFart}
-        >
-          {/* Animated fart cloud */}
-          <div aria-hidden="true" style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            fontFamily: 'var(--font-display)',
-            fontSize: 80,
-            color: 'var(--amber)',
-            textShadow: '0 0 30px rgba(255,176,0,0.4), 0 0 60px rgba(255,176,0,0.2)',
-            opacity: particles.length > 0 ? 1 : 0.6,
-            transition: 'opacity 0.3s',
-            userSelect: 'none',
-            lineHeight: 1,
-          }}>
-            ~^~
-          </div>
-
-          {/* Particles */}
-          {particles.map(p => (
-            <span
-              key={p.id}
-              style={{
-                position: 'absolute',
-                left: `${p.x}%`,
-                top: `${p.y}%`,
-                fontSize: `${p.size}px`,
-                color: p.color,
-                textShadow: `0 0 8px ${p.color}`,
-                fontFamily: 'var(--font-display)',
-                userSelect: 'none',
-                opacity: p.opacity,
-                pointerEvents: 'none',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 5,
-              }}
-            >
-              {p.char}
-            </span>
-          ))}
-
-          <div style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 11,
-            color: 'var(--muted)',
-            textAlign: 'center',
-            marginTop: 12,
-            letterSpacing: '0.1em',
-          }}>
-            [ reward stream visualization — click to emit ]
-          </div>
-        </div>
-
-        {/* Reward tiers */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 0,
-          border: '1px solid var(--border)',
-          maxWidth: 700,
-          margin: '0 auto',
-        }}>
-          {[
-            { label: 'MINIMUM HOLD', value: '1M $FARTCAT', reward: 'Passive accumulation', icon: '>' },
-            { label: 'MEDIUM HODLER', value: '10M $FARTCAT', reward: 'Enhanced reward rate', icon: '>>' },
-            { label: 'WHALE TIER', value: '100M $FARTCAT', reward: 'Maximum OTC priority', icon: '>>>' },
-          ].map((tier, i) => (
-            <div
-              key={i}
-              className="reveal"
-              style={{
-                transitionDelay: `${360 + i * 100}ms`,
-                padding: '24px 20px',
-                borderRight: i < 2 ? '1px solid var(--border)' : 'none',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, color: i === 2 ? 'var(--amber)' : 'var(--primary)', textShadow: `0 0 8px ${i === 2 ? 'rgba(255,176,0,0.5)' : 'rgba(0,255,65,0.4)'}`, marginBottom: 8 }}>
-                {tier.icon}
-              </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--muted)', letterSpacing: '0.15em', marginBottom: 6 }}>
-                {tier.label}
-              </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--text)', marginBottom: 4 }}>
-                {tier.value}
-              </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)' }}>
-                {tier.reward}
-              </div>
+          {/* Fart visual */}
+          <div className="reveal" style={{ transitionDelay: '270ms', position: 'relative', display: 'inline-block', marginBottom: 48, cursor: 'pointer' }} onClick={emit}>
+            <div style={{
+              fontSize: 72, fontFamily: 'var(--font-mono)', fontWeight: 700,
+              color: 'var(--amber)',
+              textShadow: '0 0 24px rgba(232,160,48,0.4), 0 0 60px rgba(232,160,48,0.15)',
+              lineHeight: 1, userSelect: 'none', transition: 'all 0.3s',
+            }}>
+              ~^~
             </div>
-          ))}
+            {/* Particles */}
+            {ps.map(p => (
+              <span key={p.id} className="fart-p"
+                style={{
+                  left: `${p.x}%`, top: `${p.y}%`,
+                  fontSize: `${p.sz}px`, color: p.color,
+                  textShadow: `0 0 8px ${p.color}`,
+                  opacity: p.op, transform: 'translate(-50%,-50%)',
+                }}>
+                {p.char}
+              </span>
+            ))}
+            <div style={{ marginTop: 12, fontSize: 10, color: 'var(--text-muted)', letterSpacing: '0.1em' }}>
+              [ click to emit — reward signal visualization ]
+            </div>
+          </div>
+
+          {/* Tiers */}
+          <div className="reveal" style={{ transitionDelay: '330ms', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, border: '1px solid var(--border-dim)', borderRadius: 4, overflow: 'hidden' }}>
+            {TIERS.map((t, i) => (
+              <div key={i} style={{ padding: '24px 20px', background: 'var(--bg-surface)', textAlign: 'center' }}>
+                <div style={{ fontSize: 9.5, color: 'var(--text-muted)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 8 }}>{t.l}</div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: i === 2 ? 'var(--amber)' : 'var(--green)', marginBottom: 6 }}>{t.icon}</div>
+                <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-bright)', marginBottom: 4 }}>{t.v}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>{t.r}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 640px) {
-          .rewards-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .rewards-grid > div {
-            border-right: none !important;
-            border-bottom: 1px solid var(--border) !important;
-          }
-          .rewards-grid > div:last-child {
-            border-bottom: none !important;
-          }
-        }
-      `}</style>
     </section>
   );
 };

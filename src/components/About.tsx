@@ -1,65 +1,59 @@
 import React, { useEffect, useRef } from 'react';
 
 export const About: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.reveal').forEach((el, i) => {
-              setTimeout(() => el.classList.add('visible'), i * 120);
-            });
-          }
+    const obs = new IntersectionObserver(e => {
+      if (e[0].isIntersecting) {
+        ref.current?.querySelectorAll('.reveal').forEach((el, i) => {
+          setTimeout(() => el.classList.add('v'), i * 90);
         });
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <section id="about" className="section" ref={sectionRef} style={{ borderTop: '1px solid var(--border)' }}>
+    <section id="about" className="section" ref={ref} style={{ background: 'var(--bg-surface)', borderTop: '1px solid var(--border-dim)', borderBottom: '1px solid var(--border-dim)' }}>
       <div className="container">
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 64,
-          alignItems: 'start',
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+
           {/* Left: Narrative */}
           <div>
-            <div className="section-label reveal">01 // WHAT IS FARTCAT</div>
-            <h2 className="section-title reveal" style={{ transitionDelay: '120ms' }}>
-              META-MASHUP<br />
-              <span style={{ color: 'var(--amber)', textShadow: '0 0 20px rgba(255,176,0,0.4)' }}>UNSTOPPABLE</span>
+            <div className="section-label reveal">01 // Overview</div>
+            <h2 className="section-title reveal" style={{ transitionDelay: '90ms' }}>
+              The Meta<br />
+              <span style={{ color: 'var(--green)' }}>Mashup</span>
             </h2>
+            <p className="section-body reveal" style={{ transitionDelay: '180ms', marginBottom: 28 }}>
+              Fartcoin proved that raw absurdity drives real volume. Cat tokens have emerged as the highest-beta narrative in the current cycle. FARTCAT merges both into a single compounding mechanism.
+            </p>
 
-            <div className="terminal-window reveal" style={{ transitionDelay: '240ms', marginTop: 24 }}>
+            <div className="reveal terminal" style={{ transitionDelay: '270ms' }}>
               <div className="terminal-titlebar">
                 <div className="terminal-dot red" />
                 <div className="terminal-dot amber" />
                 <div className="terminal-dot green" />
-                <span className="terminal-titlebar-text">narrative.log</span>
+                <span className="terminal-bar-text">narrative.log</span>
               </div>
               <div className="terminal-body">
                 <div className="terminal-line">
                   <span className="terminal-prompt">$</span>
-                  <span>Fartcoin took the internet's favorite absurd humor and turned it into <span className="terminal-text-amber">pure liquidity</span>.</span>
+                  <span>Fartcoin turned absurdist humor into <span className="txt-amber">liquidity</span>. Volume proved the thesis.</span>
                 </div>
-                <div className="terminal-line" style={{ marginTop: 8 }}>
+                <div className="terminal-line" style={{ marginTop: 10 }}>
                   <span className="terminal-prompt">$</span>
-                  <span>Cat tokens are quietly taking over the narrative. Dogs dominated early crypto, but feline tokens have <span className="terminal-text-green">rapidly emerged</span> as the high-beta meta.</span>
+                  <span>Cat tokens are now the dominant meta. Internet culture rotates to cats every cycle.</span>
                 </div>
-                <div className="terminal-line" style={{ marginTop: 8 }}>
+                <div className="terminal-line" style={{ marginTop: 10 }}>
                   <span className="terminal-prompt">$</span>
-                  <span>Merging the pure memetic pressure of Fartcoin with the unstoppable surge of the cat meta creates <span className="terminal-text-amber">the ultimate meta-mashup</span>.</span>
+                  <span>FARTCAT = Fartcoin absurdism <span className="txt-green">+</span> Cat meta <span className="txt-green">=</span> maximum narrative pressure.</span>
                 </div>
-                <div className="terminal-line" style={{ marginTop: 12, borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+                <div className="terminal-line" style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border-dim)' }}>
                   <span className="terminal-prompt" style={{ color: 'var(--amber)' }}>#</span>
-                  <span className="terminal-text-green">FARTCAT: where holding earns, absurdity compounds.</span>
+                  <span className="txt-dim">holding earns. absurdity compounds. the meta compounds.</span>
                 </div>
               </div>
             </div>
@@ -67,63 +61,27 @@ export const About: React.FC = () => {
 
           {/* Right: Mechanics */}
           <div>
-            <div className="section-label reveal">02 // THE MECHANICS</div>
-            <h2 className="section-title reveal" style={{ transitionDelay: '120ms' }}>
-              HOLD.<br />
-              <span style={{ color: 'var(--amber)' }}>EARN.</span>
+            <div className="section-label reveal">02 // Mechanism</div>
+            <h2 className="section-title reveal" style={{ transitionDelay: '90ms' }}>
+              Hold.<br />
+              <span style={{ color: 'var(--amber)' }}>Earn.</span>
             </h2>
+            <p className="section-body reveal" style={{ transitionDelay: '180ms', marginBottom: 28 }}>
+              The OTC reward engine distributes $FARTCOIN proportionally to all holders — automatically, continuously, on-chain.
+            </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 24 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {[
-                {
-                  step: '01',
-                  title: 'ACQUIRE $FARTCAT',
-                  desc: 'Connect your wallet. Acquire $FARTCAT through our OTC mechanism. No DEX needed — simple, direct, on-chain.',
-                  color: 'var(--primary)',
-                },
-                {
-                  step: '02',
-                  title: 'HOLD IN WALLET',
-                  desc: 'Simply hold $FARTCAT in your wallet. No staking. No lock period. No complicated DeFi routing.',
-                  color: 'var(--secondary)',
-                },
-                {
-                  step: '03',
-                  title: 'RECEIVE $FARTCOIN',
-                  desc: '$FARTCOIN rewards are distributed via OTC directly to your wallet. Accumulating with every block.',
-                  color: 'var(--amber)',
-                },
+                { n: '01', t: 'Acquire $FARTCAT', d: 'Connect your wallet. Acquire via pump.fun or OTC. No DEX routing required.', c: 'var(--green)' },
+                { n: '02', t: 'Hold in Wallet', d: 'Simply hold. No staking, no lock, no LP provision. Zero interaction needed.', c: 'var(--text-sub)' },
+                { n: '03', t: 'Receive $FARTCOIN', d: 'Rewards distributed via OTC directly to your wallet. Every block, automatically.', c: 'var(--amber)' },
               ].map((item, i) => (
-                <div
-                  key={i}
-                  className="reveal terminal-window"
-                  style={{ transitionDelay: `${240 + i * 100}ms`, cursor: 'default' }}
-                >
-                  <div className="terminal-body" style={{ padding: '16px 20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-                      <div style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 28,
-                        color: item.color,
-                        textShadow: `0 0 10px ${item.color}`,
-                        lineHeight: 1,
-                        flexShrink: 0,
-                      }}>
-                        {item.step}
-                      </div>
-                      <div>
-                        <div style={{
-                          fontFamily: 'var(--font-display)',
-                          fontSize: 18,
-                          color: 'var(--text)',
-                          marginBottom: 4,
-                        }}>
-                          {item.title}
-                        </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.7 }}>
-                          {item.desc}
-                        </div>
-                      </div>
+                <div key={i} className="reveal terminal" style={{ transitionDelay: `${270 + i * 80}ms`, cursor: 'default' }}>
+                  <div className="terminal-body" style={{ padding: '16px 20px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                    <div style={{ fontSize: 22, color: item.c, fontWeight: 700, lineHeight: 1, flexShrink: 0, width: 28 }}>{item.n}</div>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-bright)', marginBottom: 4 }}>{item.t}</div>
+                      <div style={{ fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.65 }}>{item.d}</div>
                     </div>
                   </div>
                 </div>

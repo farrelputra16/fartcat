@@ -2,190 +2,96 @@ import React, { useEffect, useRef } from 'react';
 
 const PHASES = [
   {
-    phase: 'PHASE 0',
-    title: 'GENESIS',
-    status: 'DONE',
-    items: ['Deploy FARTCAT token', 'OTC launch', 'Initial holder distribution', 'Twitter/X presence established'],
-    color: 'var(--primary)',
+    ph: 'PHASE 0', title: 'Genesis',
+    status: 'DONE', items: ['Deploy FARTCAT token', 'OTC launch', 'Twitter presence', 'Initial distribution'],
+    c: 'var(--green)',
   },
   {
-    phase: 'PHASE 1',
-    title: 'GROWTH',
-    status: 'ACTIVE',
-    items: ['OTC market maker activation', 'Community airdrop campaigns', 'Influencer onboarding', 'Telegram community launch'],
-    color: 'var(--amber)',
+    ph: 'PHASE 1', title: 'Growth',
+    status: 'ACTIVE', items: ['OTC MM activation', 'Airdrop campaigns', 'Influencer onboarding', 'Community launch'],
+    c: 'var(--amber)',
   },
   {
-    phase: 'PHASE 2',
-    title: 'META',
-    status: 'UPCOMING',
-    items: ['DEX listing preparation', 'Fartcat NFT collection', 'Cross-chain expansion discussion', '$CATS companion token'],
-    color: 'var(--muted)',
+    ph: 'PHASE 2', title: 'Meta',
+    status: 'UPCOMING', items: ['DEX listing prep', 'FARTCAT NFT collection', 'Cross-chain discussion', 'CATS companion'],
+    c: 'var(--text-dim)',
   },
   {
-    phase: 'PHASE 3',
-    title: 'MOON',
-    status: 'TBA',
-    items: ['CEX listing pursuit', 'Fartcat DAO governance', 'Metaverse cat litter box', 'Fartcoin burn mechanism vote'],
-    color: 'var(--muted)',
+    ph: 'PHASE 3', title: 'Moon',
+    status: 'TBA', items: ['CEX listing pursuit', 'DAO governance', 'Metaverse cat litter', 'Burn mechanism vote'],
+    c: 'var(--text-muted)',
   },
 ];
 
 export const Roadmap: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.reveal').forEach((el, i) => {
-              setTimeout(() => el.classList.add('visible'), i * 100);
-            });
-          }
+    const obs = new IntersectionObserver(e => {
+      if (e[0].isIntersecting) {
+        ref.current?.querySelectorAll('.reveal').forEach((el, i) => {
+          setTimeout(() => el.classList.add('v'), i * 100);
         });
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="section"
-      style={{
-        background: 'var(--surface)',
-        borderTop: '1px solid var(--border)',
-        borderBottom: '1px solid var(--border)',
-      }}
-    >
+    <section id="roadmap" ref={ref} className="section">
       <div className="container">
-        <div className="section-label reveal">05 // ROADMAP</div>
-        <h2 className="section-title reveal" style={{ transitionDelay: '120ms', marginBottom: 48 }}>
-          THE <span style={{ color: 'var(--amber)' }}>PLAN</span>
+        <div className="section-label reveal">05 // Roadmap</div>
+        <h2 className="section-title reveal" style={{ transitionDelay: '90ms', marginBottom: 40 }}>
+          The <span style={{ color: 'var(--green)' }}>Plan</span>
         </h2>
 
-        {/* ASCII Timeline */}
-        <div
-          className="reveal"
-          style={{
-            transitionDelay: '200ms',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 12,
-            color: 'var(--muted)',
-            marginBottom: 40,
-            overflowX: 'auto',
-            paddingBottom: 8,
-          }}
-        >
-          {PHASES.map((_, i) => (
+        {/* ASCII timeline */}
+        <div className="reveal" aria-hidden="true" style={{ fontSize: 11, color: 'var(--border-mid)', marginBottom: 32, overflowX: 'auto', paddingBottom: 4 }}>
+          {PHASES.map((p, i) => (
             <span key={i}>
-              {'───'}
-              <span style={{ color: PHASES[i]?.color || 'var(--muted)' }}>●</span>
-              {'───'}
-              {i < PHASES.length - 1 ? ' ' : ''}
+              {'─'.repeat(8)}
+              <span style={{ color: p.c }}>●</span>
             </span>
           ))}
-          <span style={{ color: 'var(--muted)' }}>●═══</span>
+          <span style={{ color: 'var(--border-mid)' }}>─</span>
         </div>
 
         {/* Phase cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 0,
-          border: '1px solid var(--border)',
-        }}>
-          {PHASES.map((phase, i) => (
-            <div
-              key={i}
-              className="reveal"
-              style={{
-                transitionDelay: `${260 + i * 100}ms`,
-                padding: '24px 20px',
-                borderRight: i < PHASES.length - 1 ? '1px solid var(--border)' : 'none',
-                position: 'relative',
-              }}
-            >
-              {/* Phase label */}
-              <div style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 10,
-                color: 'var(--muted)',
-                letterSpacing: '0.2em',
-                marginBottom: 6,
-              }}>
-                {phase.phase}
-              </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, border: '1px solid var(--border-dim)', borderRadius: 4, overflow: 'hidden' }}>
+          {PHASES.map((p, i) => (
+            <div key={i} className="reveal" style={{ transitionDelay: `${200 + i * 90}ms`, padding: '24px 20px', background: 'var(--bg-surface)', position: 'relative' }}>
+              {/* Active top bar */}
+              {p.status === 'ACTIVE' && (
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, var(--amber), transparent)', opacity: 0.8 }} />
+              )}
+
+              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 6 }}>{p.ph}</div>
 
               {/* Status badge */}
               <div style={{
-                display: 'inline-block',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 9,
-                letterSpacing: '0.15em',
-                padding: '2px 8px',
-                marginBottom: 10,
-                background: phase.status === 'DONE' ? 'rgba(0,255,65,0.1)' :
-                             phase.status === 'ACTIVE' ? 'rgba(255,176,0,0.1)' : 'rgba(42,90,42,0.2)',
-                border: `1px solid ${phase.status === 'DONE' ? 'rgba(0,255,65,0.3)' : phase.status === 'ACTIVE' ? 'rgba(255,176,0,0.3)' : 'var(--border)'}`,
-                color: phase.status === 'DONE' ? 'var(--primary)' :
-                       phase.status === 'ACTIVE' ? 'var(--amber)' : 'var(--muted)',
+                display: 'inline-block', fontSize: 9, letterSpacing: '0.14em',
+                padding: '2px 8px', marginBottom: 10,
+                border: `1px solid ${p.status === 'DONE' ? 'var(--green-dim)' : p.status === 'ACTIVE' ? 'rgba(232,160,48,0.3)' : 'var(--border-dim)'}`,
+                background: p.status === 'DONE' ? 'rgba(62,207,106,0.06)' : p.status === 'ACTIVE' ? 'rgba(232,160,48,0.06)' : 'transparent',
+                color: p.status === 'DONE' ? 'var(--green)' : p.status === 'ACTIVE' ? 'var(--amber)' : 'var(--text-muted)',
+                textTransform: 'uppercase', borderRadius: 2,
               }}>
-                {phase.status}
+                {p.status}
               </div>
 
-              {/* Title */}
-              <div style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 22,
-                color: phase.color,
-                textShadow: `0 0 8px ${phase.color}40`,
-                marginBottom: 14,
-              }}>
-                {phase.title}
-              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: p.c, marginBottom: 14 }}>{p.title}</div>
 
-              {/* Items */}
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {phase.items.map((item, j) => (
-                  <li
-                    key={j}
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: 11,
-                      color: phase.status === 'DONE' ? 'var(--text-dim)' : 'var(--muted)',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: 6,
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    <span style={{ color: phase.status === 'DONE' ? 'var(--primary)' : 'var(--muted)', flexShrink: 0 }}>
-                      {phase.status === 'DONE' ? '[x]' : phase.status === 'ACTIVE' ? '[~]' : '[-]'}
+                {p.items.map((item, j) => (
+                  <li key={j} style={{ fontSize: 11, color: p.status === 'DONE' ? 'var(--text-sub)' : 'var(--text-dim)', display: 'flex', gap: 7, alignItems: 'flex-start', lineHeight: 1.5 }}>
+                    <span style={{ color: p.status === 'DONE' ? 'var(--green)' : p.status === 'ACTIVE' ? 'var(--amber)' : 'var(--text-muted)', flexShrink: 0 }}>
+                      {p.status === 'DONE' ? '[✓]' : p.status === 'ACTIVE' ? '[~]' : '[ ]'}
                     </span>
                     {item}
                   </li>
                 ))}
               </ul>
-
-              {/* Active indicator */}
-              {phase.status === 'ACTIVE' && (
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 2,
-                    background: `linear-gradient(90deg, transparent, var(--amber), transparent)`,
-                    animation: 'cursor-blink 1.5s ease-in-out infinite',
-                  }}
-                />
-              )}
             </div>
           ))}
         </div>
@@ -193,17 +99,13 @@ export const Roadmap: React.FC = () => {
 
       <style>{`
         @media (max-width: 900px) {
-          #roadmap-grid {
+          #roadmap .container > div:last-child {
             grid-template-columns: 1fr 1fr !important;
           }
         }
         @media (max-width: 600px) {
-          #roadmap-grid {
+          #roadmap .container > div:last-child {
             grid-template-columns: 1fr !important;
-          }
-          #roadmap-grid > div {
-            border-right: none !important;
-            border-bottom: 1px solid var(--border) !important;
           }
         }
       `}</style>
