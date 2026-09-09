@@ -141,7 +141,7 @@ export const Rewards: React.FC = () => {
                   {[
                     { l: 'Prize Pool', v: '500K FARTCAT', c: 'var(--amber)' },
                     { l: 'Draws Every', v: '7 Days', c: 'var(--text-bright)' },
-                    { l: 'Entry Req', v: '1M FARTCAT', c: 'var(--text-sub)' },
+                    { l: 'Min. Hold', v: '1M FARTCAT', c: 'var(--text-sub)' },
                   ].map((m, i) => (
                     <div key={i} style={{ padding: '8px 14px', background: 'var(--bg-raised)', border: '1px solid var(--border-dim)', borderRadius: 4 }}>
                       <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 2 }}>{m.l}</div>
@@ -153,8 +153,7 @@ export const Rewards: React.FC = () => {
               {/* Right: Cat slot machine animation */}
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 48, lineHeight: 1, marginBottom: 8, animation: 'cat-float 2s ease-in-out infinite' }}>🎰</div>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.08em' }}>auto-qualify</div>
-                <div style={{ fontSize: 11, color: 'var(--green)', marginTop: 4 }}>by holding</div>
+                <div style={{ fontSize: 11, color: 'var(--green)', letterSpacing: '0.08em' }}>weekly draws</div>
               </div>
             </div>
           </div>
