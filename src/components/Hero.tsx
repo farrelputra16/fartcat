@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { GlitchText } from './GlitchText';
 
 const FARTSYM = ['~', '^', '*', 'o', '.', '`', '°'];
+const CA = '3XQZDtpn5QisVxcvB4sAReoknWnooU7yM4YCQtj45nqp';
 
 const TICKER = [
   'FARTCAT ON SOLANA', 'STONKS REWARDS ACTIVE', 'HOLD = EARN $FARTCOIN',
   'ZERO TX TAX', 'META-MASHUP', 'CAT + FART SYNERGY', 'DIRECT WALLET REWARDS',
-  'NO STAKING REQUIRED', 'PUMP.FUN LISTING', 'SOLANA NETWORK',
+  'NO STAKING REQUIRED', 'CA LIVE ON PUMP.FUN', 'SOLANA NETWORK',
 ];
 
 export const Hero: React.FC = () => {
@@ -183,7 +184,7 @@ export const Hero: React.FC = () => {
                   { l: 'Network', v: 'Solana' },
                   { l: 'Tax', v: '0%' },
                   { l: 'Rewards', v: '$FARTCOIN' },
-                  { l: 'CA', v: 'Soon' },
+                  { l: 'Contract', v: `${CA.slice(0, 6)}...${CA.slice(-4)}` },
                 ].map((m, i) => (
                   <div key={i} style={{
                     padding: '12px 20px',
@@ -191,7 +192,7 @@ export const Hero: React.FC = () => {
                     background: i % 2 === 0 ? 'var(--bg-surface)' : 'var(--bg-raised)',
                   }}>
                     <div style={{ fontSize: 9.5, color: 'var(--text-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 3 }}>{m.l}</div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: m.v === 'Soon' ? 'var(--amber)' : 'var(--green)' }}>{m.v}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--green)', fontFamily: m.l === 'Contract' ? 'var(--font-mono)' : 'inherit', letterSpacing: m.l === 'Contract' ? '0.02em' : 'inherit' }}>{m.v}</div>
                   </div>
                 ))}
               </div>
