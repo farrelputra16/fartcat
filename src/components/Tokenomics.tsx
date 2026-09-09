@@ -5,7 +5,7 @@ const CA = '3XQZDtpn5QisVxcvB4sAReoknWnooU7yM4YCQtj45nqp';
 const ROWS = [
   { p: 'Total Supply',    v: '1,000,000,000',      n: 'FARTCAT',            c: 'var(--text-bright)' },
   { p: 'Network',         v: 'Solana',               n: 'SVM blockchain',     c: 'var(--green)' },
-  { p: 'Transaction Tax',  v: '0%',                  n: 'Buy / sell / transfer', c: 'var(--green)' },
+  { p: 'Transaction Tax',  v: '3%',                  n: 'Buy / sell / transfer', c: 'var(--green)' },
   { p: 'Reward Token',    v: '$FARTCOIN',            n: 'Stonks-distributed', c: 'var(--amber)' },
   { p: 'Liquidity',       v: 'Locked',              n: 'Stonks + initial LP', c: 'var(--green)' },
   { p: 'Reward Rate',      v: 'Dynamic',             n: 'Scales with holding', c: 'var(--text-sub)' },
