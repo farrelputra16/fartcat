@@ -6,7 +6,7 @@ const LINES = [
   { text: '> loading memecoin.dll         ... [OK]', color: 'var(--text-dim)' },
   { text: '> injecting $FARTCOIN rewards  ... [OK]', color: 'var(--amber)' },
   { text: '> calibrating meta-mashup      ... [OK]', color: 'var(--text-dim)' },
-  { text: '> connecting to OTC relay     ... [OK]', color: 'var(--green)' },
+  { text: '> connecting to STONKS relay     ... [OK]', color: 'var(--green)' },
   { text: '> FARTCAT node online.', color: 'var(--green)' },
 ];
 

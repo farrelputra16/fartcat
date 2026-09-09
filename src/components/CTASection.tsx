@@ -38,7 +38,7 @@ export const CTASection: React.FC = () => {
             <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--amber)', boxShadow: '0 0 8px var(--amber)', animation: 'pulse-glow 1.5s ease-in-out infinite' }} />
             <span style={{ fontSize: 10, color: 'var(--amber)', letterSpacing: '0.1em' }}>PENDING</span>
           </div>
-          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>via <span style={{ color: 'var(--green)' }}>@fartcat_otc</span></span>
+          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>via <span style={{ color: 'var(--green)' }}>@fartcat_stonks</span></span>
         </div>
 
         {/* Heading */}
@@ -71,7 +71,7 @@ export const CTASection: React.FC = () => {
         </div>
 
         <p className="reveal section-body" style={{ transitionDelay: '270ms', margin: '0 auto 36px', textAlign: 'center' }}>
-          $FARTCAT is live. OTC acquiring now open.<br />Hold. Earn $FARTCOIN. Ride the meta.
+          $FARTCAT is live. Stonks acquiring now open.<br />Hold. Earn $FARTCOIN. Ride the meta.
         </p>
 
         {/* Main CTA */}
@@ -91,13 +91,13 @@ export const CTASection: React.FC = () => {
             <div className="terminal-dot red" />
             <div className="terminal-dot amber" />
             <div className="terminal-dot green" />
-            <span className="terminal-bar-text">contact.otc — @fartcat_otc</span>
+            <span className="terminal-bar-text">contact.stonks — @fartcat_stonks</span>
           </div>
           <div className="terminal-body">
             {[
-              { k: '$', v: 'Contact', t: '@fartcat_otc', c: 'var(--green)' },
+              { k: '$', v: 'Contact', t: '@fartcat_stonks', c: 'var(--green)' },
               { k: '$', v: 'Network:', t: 'Solana', c: 'var(--green)' },
-              { k: '$', v: 'Status:', t: 'OTC OPEN — Limited Allocations', c: 'var(--amber)' },
+              { k: '$', v: 'Status:', t: 'Stonks OPEN — Limited Allocations', c: 'var(--amber)' },
               { k: '$', v: 'CA:', t: '[ coming soon — announced on Twitter ]', c: 'var(--text-muted)' },
             ].map((l, i) => (
               <div key={i} className="terminal-line" style={{ marginTop: i > 0 ? 8 : 0 }}>
@@ -107,7 +107,7 @@ export const CTASection: React.FC = () => {
             ))}
             <div className="terminal-line" style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border-dim)' }}>
               <span className="terminal-prompt" style={{ color: 'var(--amber)' }}>#</span>
-              <span className="txt-dim">Do NOT reply to DMs claiming to be us. Only reach via <strong style={{ color: 'var(--green)' }}>@fartcat_otc</strong></span>
+              <span className="txt-dim">Do NOT reply to DMs claiming to be us. Only reach via <strong style={{ color: 'var(--green)' }}>@fartcat_stonks</strong></span>
             </div>
           </div>
         </div>

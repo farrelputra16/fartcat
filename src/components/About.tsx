@@ -67,14 +67,14 @@ export const About: React.FC = () => {
               <span style={{ color: 'var(--amber)' }}>Earn.</span>
             </h2>
             <p className="section-body reveal" style={{ transitionDelay: '180ms', marginBottom: 28 }}>
-              The OTC reward engine distributes $FARTCOIN proportionally to all holders — automatically, continuously, on-chain.
+              The Stonks reward engine distributes $FARTCOIN proportionally to all holders — automatically, continuously, on-chain.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {[
-                { n: '01', t: 'Acquire $FARTCAT', d: 'Connect your wallet. Acquire via pump.fun or OTC. No DEX routing required.', c: 'var(--green)' },
+                { n: '01', t: 'Acquire $FARTCAT', d: 'Connect your wallet. Acquire via pump.fun or Stonks. No DEX routing required.', c: 'var(--green)' },
                 { n: '02', t: 'Hold in Wallet', d: 'Simply hold. No staking, no lock, no LP provision. Zero interaction needed.', c: 'var(--text-sub)' },
-                { n: '03', t: 'Receive $FARTCOIN', d: 'Rewards distributed via OTC directly to your wallet. Every block, automatically.', c: 'var(--amber)' },
+                { n: '03', t: 'Receive $FARTCOIN', d: 'Rewards distributed via Stonks directly to your wallet. Every block, automatically.', c: 'var(--amber)' },
               ].map((item, i) => (
                 <div key={i} className="reveal terminal" style={{ transitionDelay: `${270 + i * 80}ms`, cursor: 'default' }}>
                   <div className="terminal-body" style={{ padding: '16px 20px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>

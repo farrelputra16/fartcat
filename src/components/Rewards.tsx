@@ -5,7 +5,7 @@ const FARTSYM = ['~', '^', '*', 'o', '.'];
 const TIERS = [
   { l: 'Minimum', v: '1M FARTCAT', r: 'Passive accumulation', icon: '>' },
   { l: 'Medium', v: '10M FARTCAT', r: 'Enhanced reward rate', icon: '>>' },
-  { l: 'Whale', v: '100M FARTCAT', r: 'Max OTC priority', icon: '>>>' },
+  { l: 'Whale', v: '100M FARTCAT', r: 'Max Stonks priority', icon: '>>>' },
 ];
 
 export const Rewards: React.FC = () => {
@@ -70,7 +70,7 @@ export const Rewards: React.FC = () => {
     <section id="rewards" ref={ref} className="section">
       <div className="container">
         <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
-          <div className="section-label reveal" style={{ justifyContent: 'center' }}>03 // OTC Reward Engine</div>
+          <div className="section-label reveal" style={{ justifyContent: 'center' }}>03 // Stonks Reward Engine</div>
           <h2 className="section-title reveal" style={{ transitionDelay: '90ms', marginBottom: 8 }}>
             Hold <span style={{ color: 'var(--green)' }}>$FARTCAT</span>
           </h2>
@@ -78,7 +78,7 @@ export const Rewards: React.FC = () => {
             Get <span style={{ color: 'var(--amber)' }}>$FARTCOIN</span>
           </h2>
           <p className="reveal section-body" style={{ transitionDelay: '210ms', margin: '0 auto 56px', textAlign: 'center' }}>
-            Every $FARTCAT holder receives $FARTCOIN rewards proportionally — no farming, no staking, no LP requirements. OTC distributes rewards on every block.
+            Every $FARTCAT holder receives $FARTCOIN rewards proportionally — no farming, no staking, no LP requirements. Stonks distributes rewards on every block.
           </p>
 
           {/* Fart visual */}

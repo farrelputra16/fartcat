@@ -4,7 +4,7 @@ import { GlitchText } from './GlitchText';
 const FARTSYM = ['~', '^', '*', 'o', '.', '`', '°'];
 
 const TICKER = [
-  'FARTCAT ON SOLANA', 'OTC REWARDS ACTIVE', 'HOLD = EARN $FARTCOIN',
+  'FARTCAT ON SOLANA', 'STONKS REWARDS ACTIVE', 'HOLD = EARN $FARTCOIN',
   'ZERO TX TAX', 'META-MASHUP', 'CAT + FART SYNERGY', 'DIRECT WALLET REWARDS',
   'NO STAKING REQUIRED', 'PUMP.FUN LISTING', 'SOLANA NETWORK',
 ];
@@ -153,13 +153,13 @@ export const Hero: React.FC = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                 <div style={{ height: 1, width: 32, background: 'var(--border-mid)' }} />
                 <span style={{ fontSize: 12, color: 'var(--amber)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                  $FARTCAT — $FARTCOIN OTC Reward Engine
+                  $FARTCAT — $FARTCOIN Stonks Reward Engine
                 </span>
               </div>
 
               {/* Tagline */}
               <p style={{ fontSize: 14, color: 'var(--text-sub)', lineHeight: 1.75, maxWidth: 420, marginBottom: 32 }}>
-                Hold $FARTCAT in your wallet. Earn $FARTCOIN rewards continuously — no staking, no lock, no LP requirements. Pure OTC mechanism, running on Solana.
+                Hold $FARTCAT in your wallet. Earn $FARTCOIN rewards continuously — no staking, no lock, no LP requirements. Pure Stonks mechanism, running on Solana.
               </p>
 
               {/* CTAs */}

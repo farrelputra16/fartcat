@@ -3,12 +3,12 @@ import React, { useEffect, useRef } from 'react';
 const PHASES = [
   {
     ph: 'PHASE 0', title: 'Genesis',
-    status: 'DONE', items: ['Deploy FARTCAT token', 'OTC launch', 'Twitter presence', 'Initial distribution'],
+    status: 'DONE', items: ['Deploy FARTCAT token', 'Stonks launch', 'Twitter presence', 'Initial distribution'],
     c: 'var(--green)',
   },
   {
     ph: 'PHASE 1', title: 'Growth',
-    status: 'ACTIVE', items: ['OTC MM activation', 'Airdrop campaigns', 'Influencer onboarding', 'Community launch'],
+    status: 'ACTIVE', items: ['Stonks MM activation', 'Airdrop campaigns', 'Influencer onboarding', 'Community launch'],
     c: 'var(--amber)',
   },
   {

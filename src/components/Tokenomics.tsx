@@ -4,10 +4,10 @@ const ROWS = [
   { p: 'Total Supply',   v: '1,000,000,000', n: 'FARTCAT',           c: 'var(--text-bright)' },
   { p: 'Network',        v: 'Solana',          n: 'SVM blockchain',    c: 'var(--green)' },
   { p: 'Transaction Tax',v: '0%',              n: 'Buy / sell / transfer', c: 'var(--green)' },
-  { p: 'Reward Token',  v: '$FARTCOIN',       n: 'OTC-distributed',    c: 'var(--amber)' },
-  { p: 'Liquidity',     v: 'Locked',           n: 'OTC + initial LP',   c: 'var(--green)' },
+  { p: 'Reward Token',  v: '$FARTCOIN',       n: 'Stonks-distributed',    c: 'var(--amber)' },
+  { p: 'Liquidity',     v: 'Locked',           n: 'Stonks + initial LP',   c: 'var(--green)' },
   { p: 'Reward Rate',    v: 'Dynamic',          n: 'Scales with holding', c: 'var(--text-sub)' },
-  { p: 'OTC Mechanism',  v: 'Direct',           n: 'Wallet-to-wallet',   c: 'var(--amber)' },
+  { p: 'Stonks Mechanism',  v: 'Direct',           n: 'Wallet-to-wallet',   c: 'var(--amber)' },
   { p: 'Contract',       v: 'COMING SOON',     n: 'Public CA on launch', c: 'var(--amber)' },
 ];
 
@@ -56,7 +56,7 @@ export const Tokenomics: React.FC = () => {
               <span style={{ fontSize: 10, color: 'var(--amber)', letterSpacing: '0.1em' }}>PENDING</span>
             </div>
             <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-              announced via <span style={{ color: 'var(--green)' }}>@fartcat_otc</span>
+              announced via <span style={{ color: 'var(--green)' }}>@fartcat_stonks</span>
             </div>
           </div>
         </div>
@@ -93,12 +93,12 @@ export const Tokenomics: React.FC = () => {
           </div>
         </div>
 
-        {/* OTC note */}
+        {/* Stonks note */}
         <div className="reveal terminal" style={{ transitionDelay: '400ms', marginTop: 20 }}>
           <div className="terminal-body">
             <div className="terminal-line">
               <span className="terminal-prompt">$</span>
-              <span>Acquire $FARTCAT via <span className="txt-amber">OTC</span> — contact <span className="txt-green">@fartcat_otc</span> on X for terms. No DEX, no slippage.</span>
+              <span>Acquire $FARTCAT via <span className="txt-amber">Stonks</span> — contact <span className="txt-green">@fartcat_stonks</span> on X for terms. No DEX, no slippage.</span>
             </div>
           </div>
         </div>

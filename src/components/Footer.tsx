@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
               <span style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 400 }}>Solana</span>
             </div>
             <div style={{ height: 12, width: 1, background: 'var(--border-dim)' }} />
-            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>OTC Reward Engine</span>
+            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Stonks Reward Engine</span>
           </div>
 
           {/* Nav */}
@@ -49,14 +49,14 @@ export const Footer: React.FC = () => {
             <a href="https://pump.fun" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: '6px 14px', fontSize: 10 }}>
               BUY $FARTCAT
             </a>
-            <a href="https://x.com/fartcat_otc" target="_blank" rel="noopener noreferrer"
+            <a href="https://x.com/fartcat_stonks" target="_blank" rel="noopener noreferrer"
               style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-dim)', transition: 'color 0.15s' }}
               onMouseEnter={e => ((e.target as HTMLElement).style.color = 'var(--green)')}
               onMouseLeave={e => ((e.target as HTMLElement).style.color = 'var(--text-dim)')}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.261 5.635 5.903-5.635zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
-              @fartcat_otc
+              @fartcat_stonks
             </a>
           </div>
         </div>
@@ -69,7 +69,7 @@ export const Footer: React.FC = () => {
           }}>
             $FARTCAT is a memecoin. Not financial advice. Do your own research.
             Past performance does not guarantee future results. This is not a security.
-            Powered by Solana. Rewards distributed via OTC mechanism.
+            Powered by Solana. Rewards distributed via Stonks mechanism.
           </div>
         </div>
       </div>
