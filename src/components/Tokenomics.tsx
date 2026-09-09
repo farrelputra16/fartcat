@@ -56,7 +56,7 @@ export const Tokenomics: React.FC = () => {
               <span style={{ fontSize: 10, color: 'var(--amber)', letterSpacing: '0.1em' }}>PENDING</span>
             </div>
             <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-              announced via <span style={{ color: 'var(--green)' }}>@fartcat_stonks</span>
+              announced via <span style={{ color: 'var(--green)' }}>@Fartcat_Stonk</span>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ export const Tokenomics: React.FC = () => {
           <div className="terminal-body">
             <div className="terminal-line">
               <span className="terminal-prompt">$</span>
-              <span>Acquire $FARTCAT via <span className="txt-amber">Stonks</span> — contact <span className="txt-green">@fartcat_stonks</span> on X for terms. No DEX, no slippage.</span>
+              <span>Acquire $FARTCAT via <span className="txt-amber">Stonks</span> — contact <span className="txt-green">@Fartcat_Stonk</span> on X for terms. No DEX, no slippage.</span>
             </div>
           </div>
         </div>
