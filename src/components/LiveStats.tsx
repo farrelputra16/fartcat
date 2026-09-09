@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const CA = '3XQZDtpn5QisVxcvB4sAReoknWnooU7yM4YCQtj45nqp';
-const API = `https://www.stonkfun.xyz/api/rewards?mint=${CA}`;
+const API = `/api/rewards?mint=${CA}`;
 
 interface Stats {
   distributedTokens: number;
