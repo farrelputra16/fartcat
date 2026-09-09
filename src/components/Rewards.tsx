@@ -109,7 +109,7 @@ export const Rewards: React.FC = () => {
           </div>
 
           {/* Tiers */}
-          <div className="reveal" style={{ transitionDelay: '330ms', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, border: '1px solid var(--border-dim)', borderRadius: 4, overflow: 'hidden' }}>
+          <div className="reveal" style={{ transitionDelay: '330ms', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, border: '1px solid var(--border-dim)', borderRadius: 4, overflow: 'hidden', marginBottom: 48 }}>
             {TIERS.map((t, i) => (
               <div key={i} style={{ padding: '24px 20px', background: 'var(--bg-surface)', textAlign: 'center' }}>
                 <div style={{ fontSize: 9.5, color: 'var(--text-muted)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 8 }}>{t.l}</div>
@@ -118,6 +118,45 @@ export const Rewards: React.FC = () => {
                 <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>{t.r}</div>
               </div>
             ))}
+          </div>
+
+          {/* Raffle / Lottery */}
+          <div className="reveal terminal" style={{ transitionDelay: '400ms', borderColor: 'rgba(62,207,106,0.2)' }}>
+            <div className="terminal-titlebar" style={{ background: 'rgba(62,207,106,0.06)' }}>
+              <div className="terminal-dot red" />
+              <div className="terminal-dot amber" />
+              <div className="terminal-dot green" />
+              <span className="terminal-bar-text" style={{ color: 'var(--green)' }}>stonks_lottery.toml</span>
+            </div>
+            <div className="terminal-body" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, alignItems: 'center' }}>
+              {/* Left: info */}
+              <div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--green)', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>
+                  STONKS WEEKLY RAFFLE
+                </div>
+                <div style={{ fontSize: 13, color: 'var(--text-sub)', lineHeight: 1.7, marginBottom: 12 }}>
+                  Every week, <span style={{ color: 'var(--green)' }}>StonkFun</span> randomly selects lucky $FARTCAT holders to win bonus $FARTCOIN prizes. The more you hold, the higher your raffle entries.
+                </div>
+                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                  {[
+                    { l: 'Prize Pool', v: '500K FARTCAT', c: 'var(--amber)' },
+                    { l: 'Draws Every', v: '7 Days', c: 'var(--text-bright)' },
+                    { l: 'Entry Req', v: '1M FARTCAT', c: 'var(--text-sub)' },
+                  ].map((m, i) => (
+                    <div key={i} style={{ padding: '8px 14px', background: 'var(--bg-raised)', border: '1px solid var(--border-dim)', borderRadius: 4 }}>
+                      <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 2 }}>{m.l}</div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: m.c, fontFamily: 'var(--font-mono)' }}>{m.v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Right: Cat slot machine animation */}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 48, lineHeight: 1, marginBottom: 8, animation: 'cat-float 2s ease-in-out infinite' }}>🎰</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.08em' }}>auto-qualify</div>
+                <div style={{ fontSize: 11, color: 'var(--green)', marginTop: 4 }}>by holding</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0c0c0e"/>
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="g" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#1a1a22" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="greenGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3ecf6a" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#5dffa0" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="amberGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e8a030" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#f5c050" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+
+  <!-- Glow center -->
+  <ellipse cx="600" cy="280" rx="400" ry="200" fill="url(#greenGlow)" opacity="0.15"/>
+
+  <!-- FARTCAT text -->
+  <text x="100" y="240" font-family="'JetBrains Mono', monospace" font-size="130" font-weight="700" fill="#e4e4f0" letter-spacing="-4">FART</text>
+  <text x="100" y="370" font-family="'JetBrains Mono', monospace" font-size="130" font-weight="700" fill="#3ecf6a" letter-spacing="-4" filter="url(#glow)">CAT</text>
+
+  <!-- Glow filter -->
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Subtitle -->
+  <text x="100" y="420" font-family="'JetBrains Mono', monospace" font-size="28" fill="#6e6e82" letter-spacing="2">$FARTCAT — $FARTCOIN REWARD ENGINE</text>
+
+  <!-- Token info -->
+  <rect x="100" y="450" width="240" height="80" rx="6" fill="#111115" stroke="#232329" stroke-width="1"/>
+  <text x="120" y="478" font-family="'JetBrains Mono', monospace" font-size="14" fill="#4a4a5a" letter-spacing="2">NETWORK</text>
+  <text x="120" y="512" font-family="'JetBrains Mono', monospace" font-size="22" font-weight="700" fill="#3ecf6a">SOLANA</text>
+
+  <rect x="360" y="450" width="240" height="80" rx="6" fill="#111115" stroke="#232329" stroke-width="1"/>
+  <text x="380" y="478" font-family="'JetBrains Mono', monospace" font-size="14" fill="#4a4a5a" letter-spacing="2">TAX</text>
+  <text x="380" y="512" font-family="'JetBrains Mono', monospace" font-size="22" font-weight="700" fill="#3ecf6a">0%</text>
+
+  <rect x="620" y="450" width="240" height="80" rx="6" fill="#111115" stroke="#232329" stroke-width="1"/>
+  <text x="640" y="478" font-family="'JetBrains Mono', monospace" font-size="14" fill="#4a4a5a" letter-spacing="2">REWARDS</text>
+  <text x="640" y="512" font-family="'JetBrains Mono', monospace" font-size="22" font-weight="700" fill="#e8a030">$FARTCOIN</text>
+
+  <rect x="880" y="450" width="220" height="80" rx="6" fill="#111115" stroke="#232329" stroke-width="1"/>
+  <text x="900" y="478" font-family="'JetBrains Mono', monospace" font-size="14" fill="#4a4a5a" letter-spacing="2">CA</text>
+  <text x="900" y="512" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600" fill="#3ecf6a">3XQZDt...45nqp</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="570" width="1200" height="60" fill="#111115" stroke="#232329" stroke-width="0"/>
+  <text x="100" y="607" font-family="'JetBrains Mono', monospace" font-size="16" fill="#3ecf6a">● LIVE ON SOLANA</text>
+  <text x="550" y="607" font-family="'JetBrains Mono', monospace" font-size="16" fill="#6e6e82">pump.fun</text>
+  <text x="800" y="607" font-family="'JetBrains Mono', monospace" font-size="16" fill="#4a4a5a">●</text>
+  <text x="830" y="607" font-family="'JetBrains Mono', monospace" font-size="16" fill="#4a4a5a">STONKS REWARD ENGINE</text>
+</svg>

@@ -366,8 +366,20 @@ img, svg { display: block; }
   }
 }
 
+@keyframes cat-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .container { padding: 0 20px; }
   .section { padding: 64px 0; }
 }
+
+
