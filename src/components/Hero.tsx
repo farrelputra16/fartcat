@@ -164,7 +164,7 @@ export const Hero: React.FC = () => {
 
               {/* CTAs */}
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 40 }}>
-                <a href="https://pump.fun" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 12, padding: '11px 24px' }}>
+                <a href="https://pump.fun/3XQZDtpn5QisVxcvB4sAReoknWnooU7yM4YCQtj45nqp" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 12, padding: '11px 24px' }}>
                   BUY $FARTCAT
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <path d="M7 17L17 7M7 7h10v10"/>

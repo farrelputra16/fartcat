@@ -52,7 +52,7 @@ export const NavBar: React.FC = () => {
             </a>
           ))}
           <a
-            href="https://pump.fun"
+            href="https://pump.fun/3XQZDtpn5QisVxcvB4sAReoknWnooU7yM4YCQtj45nqp"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"
