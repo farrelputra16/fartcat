@@ -3,15 +3,18 @@ import { GlitchText } from './GlitchText';
 
 const FARTSYM = ['~', '^', '*', 'o', '.', '`', '°'];
 const CA = '3XQZDtpn5QisVxcvB4sAReoknWnooU7yM4YCQtj45nqp';
+const API = `/api/rewards?mint=${CA}`;
 
 const TICKER = [
   'FARTCAT ON SOLANA', 'STONKS REWARDS ACTIVE', 'HOLD = EARN $FARTCOIN',
-  'ZERO TX TAX', 'META-MASHUP', 'CAT + FART SYNERGY', 'DIRECT WALLET REWARDS',
-  'NO STAKING REQUIRED', 'CA LIVE ON PUMP.FUN', 'SOLANA NETWORK',
+  'NO STAKING REQUIRED', 'META-MASHUP', 'DIRECT WALLET REWARDS',
+  'CA LIVE ON PUMP.FUN', 'SOLANA NETWORK', 'CAT + FARTCOIN SYNERGY',
 ];
 
 export const Hero: React.FC = () => {
   const [farting, setFarting] = useState(false);
+  const [holders, setHolders] = useState<number | null>(null);
+  const [dotOn, setDotOn] = useState(false);
   const [particles, setParticles] = useState<Array<{id:number; x:number; y:number; dx:number; dy:number; char:string; color:string; sz:number; op:number}>>([]);
   const nid = useRef(0);
   const raf = useRef(0);
@@ -74,6 +77,24 @@ export const Hero: React.FC = () => {
     return () => { clearInterval(id); if (raf.current) cancelAnimationFrame(raf.current); };
   }, [fire]);
 
+  // Fetch holders from API
+  useEffect(() => {
+    const fetchHolders = async () => {
+      try {
+        const res = await fetch(API);
+        if (!res.ok) return;
+        const json = await res.json();
+        if (json.holderCount) setHolders(json.holderCount);
+      } catch {}
+    };
+    fetchHolders();
+    const t = setInterval(fetchHolders, 20_000);
+    const dot = setInterval(() => setDotOn(o => !o), 600);
+    return () => { clearInterval(t); clearInterval(dot); };
+  }, []);
+
+  const fmtCount = (n: number) => new Intl.NumberFormat('en-US').format(n);
+
   return (
     <section style={{ minHeight: '100dvh', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 
@@ -119,16 +140,46 @@ export const Hero: React.FC = () => {
 
             {/* LEFT */}
             <div>
-              {/* Badge */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+              {/* Badge row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
+                {/* Live on Solana */}
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 6,
-                  border: '1px solid var(--green-dim)',
+                  border: '1px solid rgba(62,207,106,0.3)',
                   background: 'rgba(62,207,106,0.06)',
-                  padding: '4px 12px', borderRadius: 3,
+                  padding: '4px 12px', borderRadius: 4,
                 }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 6px var(--green)', animation: 'pulse-glow 1.5s ease-in-out infinite' }} />
-                  <span style={{ fontSize: 10.5, color: 'var(--green)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Live on Solana</span>
+                  <span style={{ fontSize: 10, color: 'var(--green)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Live on Solana</span>
+                </div>
+
+                {/* Trending badge */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  border: '1px solid rgba(232,160,48,0.3)',
+                  background: 'rgba(232,160,48,0.06)',
+                  padding: '4px 12px', borderRadius: 4,
+                }}>
+                  <div style={{ fontSize: 14, lineHeight: 1 }}>🔥</div>
+                  <span style={{ fontSize: 10, color: 'var(--amber)', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700 }}>Trending on pump.fun</span>
+                </div>
+
+                {/* Live holders */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  border: '1px solid rgba(62,207,106,0.2)',
+                  background: 'rgba(62,207,106,0.05)',
+                  padding: '4px 12px', borderRadius: 4,
+                }}>
+                  <div style={{
+                    width: 6, height: 6, borderRadius: '50%',
+                    background: dotOn ? 'var(--green)' : 'rgba(62,207,106,0.3)',
+                    boxShadow: dotOn ? '0 0 6px var(--green)' : 'none',
+                    transition: 'background 0.2s',
+                  }} />
+                  <span style={{ fontSize: 10, color: 'var(--green)', letterSpacing: '0.08em' }}>
+                    {holders ? `${fmtCount(holders)} holders` : 'Loading...'}
+                  </span>
                 </div>
               </div>
 
@@ -182,7 +233,7 @@ export const Hero: React.FC = () => {
               }}>
                 {[
                   { l: 'Network', v: 'Solana' },
-                  { l: 'Tax', v: '0%' },
+                  { l: 'Tax', v: '3%' },
                   { l: 'Rewards', v: '$FARTCOIN' },
                   { l: 'Contract', v: `${CA.slice(0, 6)}...${CA.slice(-4)}` },
                 ].map((m, i) => (
