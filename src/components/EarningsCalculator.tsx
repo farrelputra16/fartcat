@@ -60,14 +60,11 @@ export const EarningsCalculator: React.FC = () => {
   // % of total supply
   const pctSupply = (holdNum / FARTCAT_SUPPLY) * 100;
 
-  // StonkFun reward calculation
-  // Correct formula:
-  //   userPct = holdNum / FARTCAT_SUPPLY (user's proportional share)
-  //   dailyDist = distributedTokens / daysLive (actual daily FARTCOIN distributed)
-  //   userDailyReward = userPct × dailyDist × holderShareRate (0.5%)
+  // StonkFun: 3% transfer tax on every $FARTCAT transfer distributed pro-rata to holders
+  // No separate creator fee — 3% is what gets distributed
   const userPct = holdNum / FARTCAT_SUPPLY;
   const dailyDist = k && daysLive > 0 ? k.distributedTokens / daysLive : 0;
-  const holderShareRate = 0.005; // 0.5% net from 3% tax
+  const holderShareRate = 1; // 100% of the 3% tax goes to holders (2.5% ops deducted by StonkFun is separate)
   const dailyReward = userPct * dailyDist * holderShareRate;
   const weeklyReward = dailyReward * 7;
   const monthlyReward = dailyReward * 30;
@@ -132,12 +129,6 @@ export const EarningsCalculator: React.FC = () => {
                 <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--amber)', fontFamily: 'var(--font-mono)' }}>3%</div>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'rgba(62,207,106,0.04)', border: '1px solid rgba(62,207,106,0.15)', borderRadius: 6 }}>
-              <div>
-                <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.14em', textTransform: 'uppercase' as const }}>To Holders</div>
-                <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--green)', fontFamily: 'var(--font-mono)' }}>~0.5%</div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -182,7 +173,7 @@ export const EarningsCalculator: React.FC = () => {
           lineHeight: 1.7,
         }}>
           <span style={{ color: 'var(--amber)', fontWeight: 700, flexShrink: 0 }}>// StonkFun Tax Logic:</span>
-          <span>Every <span style={{ color: 'var(--amber)' }}>$FARTCAT transfer pays 3% tax</span> — <span style={{ color: 'var(--green)' }}>~0.5% net distributed pro-rata to $FARTCOIN holders</span> (2.5% deducted for ops). Rewards accumulate until distributed, sent to wallets holding ≥ <span style={{ color: 'var(--amber)' }}>$20</span> in $FARTCAT. <span style={{ color: 'var(--text-muted)' }}>No staking. No lock. Pure hold.</span></span>
+          <span>Every <span style={{ color: 'var(--amber)' }}>$FARTCAT transfer pays 3% tax</span> — distributed <span style={{ color: 'var(--green)' }}>pro-rata to $FARTCOIN holders</span> automatically. No staking needed — just hold $FARTCAT.</span>
         </div>
 
         {/* Calculator */}
@@ -281,7 +272,7 @@ export const EarningsCalculator: React.FC = () => {
                   </div>
                 ))}
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.6, marginTop: 4 }}>
-                  * Estimates based on StonkFun distribution rate. Earnings vary with trading volume. Not financial advice.
+                  * Estimates based on StonkFun actual distribution rate. Earnings vary with trading volume. Not financial advice.
                 </div>
               </div>
             ) : (
