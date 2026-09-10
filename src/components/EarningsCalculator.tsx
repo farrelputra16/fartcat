@@ -89,12 +89,6 @@ export const EarningsCalculator: React.FC = () => {
   const fmtUSD = (n: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
-  const fmtUSDShort = (n: number) => {
-    if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(2) + 'M';
-    if (n >= 1_000) return '$' + (n / 1_000).toFixed(2) + 'K';
-    return fmtUSD(n);
-  };
-
   const fmtC = (n: number) => new Intl.NumberFormat('en-US').format(n);
   const fmtPct = (n: number) => n.toFixed(6) + '%';
 
