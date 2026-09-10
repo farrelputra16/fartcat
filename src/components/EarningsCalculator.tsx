@@ -23,7 +23,6 @@ interface Stats {
 // StonkFun mechanics: 3% tax on every $FARTCAT transfer
 // ~0.5% of the tax is distributed pro-rata to $FARTCOIN holders
 // Formula: userDailyReward = holdNum × (distributedTokens / holderCount) / daysLive × 0.5%
-// where distributedTokens/holderCount is the average reward per holder (normalized)
 
 export const EarningsCalculator: React.FC = () => {
   // holdings stored as raw token count
@@ -62,6 +61,7 @@ export const EarningsCalculator: React.FC = () => {
   const pctSupply = (holdNum / FARTCAT_SUPPLY) * 100;
 
   // StonkFun reward calculation
+  // avgTokensPerHolder = total rewards distributed to average holder
   const avgTokensPerHolder = k && k.holderCount > 0
     ? k.distributedTokens / k.holderCount
     : 0;
@@ -80,7 +80,6 @@ export const EarningsCalculator: React.FC = () => {
     return n.toExponential(2);
   };
 
-  // Display: show supply in millions
   const fmtHoldings = (n: number) => {
     if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
     if (n >= 1_000) return (n / 1_000).toFixed(2) + 'K';
@@ -89,6 +88,12 @@ export const EarningsCalculator: React.FC = () => {
 
   const fmtUSD = (n: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+
+  const fmtUSDShort = (n: number) => {
+    if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(2) + 'M';
+    if (n >= 1_000) return '$' + (n / 1_000).toFixed(2) + 'K';
+    return fmtUSD(n);
+  };
 
   const fmtC = (n: number) => new Intl.NumberFormat('en-US').format(n);
   const fmtPct = (n: number) => n.toFixed(6) + '%';
@@ -139,6 +144,33 @@ export const EarningsCalculator: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Live Reward Stats from StonkFun */}
+        {k && (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: 1,
+            border: '1px solid var(--border-dim)',
+            borderRadius: 6,
+            overflow: 'hidden',
+            marginBottom: 28,
+          }}>
+            {[
+              { l: 'Total Distributed', v: fmtUSD(k.distributedUsd), c: 'var(--green)' },
+              { l: 'Pending Payout', v: k.pendingUsd > 0 ? fmtUSD(k.pendingUsd) : '$0.00', c: 'var(--amber)' },
+              { l: 'Payout Count', v: fmtC(k.payoutCount), c: 'var(--text-bright)' },
+              { l: 'Reward Token', v: k.quoteSymbol, c: 'var(--green)' },
+              { l: 'Token Price', v: fmtUSD(k.quotePriceUsd), c: 'var(--text-bright)' },
+              { l: 'Avg per Holder', v: fmtToken(k.distributedTokens / k.holderCount) + ' ' + k.quoteSymbol, c: 'var(--amber)' },
+            ].map((m, i) => (
+              <div key={i} style={{ padding: '14px 16px', background: 'var(--bg-surface)', borderRight: '1px solid var(--border-dim)' }}>
+                <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>{m.l}</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: m.c, fontFamily: 'var(--font-mono)' }}>{m.v}</div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* How it works */}
         <div style={{
