@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "prebuild": "cp index.html index.html.bak && git checkout -- index.html",
+    "postbuild": "cp dist/index.html index.html && rm -f index.html.bak",
     "preview": "vite preview"
   },
   "dependencies": {
