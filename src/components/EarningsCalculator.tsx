@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const API = '/api/rewards?mint=3XQZDtpn5QisVxcvB4sAReoknWnooU7yM4YCQtj45nqp';
+const FARTCAT_SUPPLY = 1_000_000_000; // 1B total supply
 const LAUNCH_DATE = new Date('2026-09-09T00:00:00Z');
 
 interface Stats {
@@ -51,36 +52,27 @@ export const EarningsCalculator: React.FC = () => {
   const quoteSymbol = k ? k.quoteSymbol : 'FARTCOIN';
   const daysLive = Math.max(1, Math.floor((Date.now() - LAUNCH_DATE.getTime()) / 86400000));
 
-  // StonkFun mechanics: 3% tax on every transfer → ~0.5% net distributed to holders pro-rata
-  //
-  // Formula:
-  //   avgTokensPerHolder = distributedTokens / holderCount
-  //     → total rewards distributed to average holder (in token terms)
-  //   userDailyReward = holdNum × (distributedTokens / holderCount) / daysLive × 0.5%
-  //     → user's proportional share of the daily tax pool
-  //
-  // Why this works:
-  //   - Total daily tax pool ≈ dailyVolume × 3%
-  //   - Holder share of pool ≈ dailyVolume × 3% × 0.5% = dailyVolume × 0.00015
-  //   - Pro-rata: user's share = (holdNum / totalSupply) × holderShare
-  //   - avgTokensPerHolder normalizes: removes totalSupply dependency
-  //     since both user and average holder scale by it equally
+  // % of total supply
+  const pctSupply = (holdNum / FARTCAT_SUPPLY) * 100;
+
+  // StonkFun: 3% tax → ~0.5% net to holders pro-rata
+  // avgTokensPerHolder = total rewards to average holder (normalized metric from StonkFun data)
   const avgTokensPerHolder = k && k.holderCount > 0
     ? k.distributedTokens / k.holderCount
     : 0;
 
-  // Net holder share: 0.5% of the 3% tax (2.5% deducted for ops)
-  const holderShareRate = 0.005; // 0.5%
+  // userDailyReward = user's holdings × (avgTokensPerHolder/daysLive) × 0.5%
+  const holderShareRate = 0.005;
   const dailyReward = holdNum * (avgTokensPerHolder / daysLive) * holderShareRate;
   const weeklyReward = dailyReward * 7;
   const monthlyReward = dailyReward * 30;
   const annualReward = dailyReward * 365;
 
-  // APY calculation: (daily reward USD / user holding value USD) * 365 * 100
-  // Use token price from StonkFun API
-  const userHoldingValue = holdNum * (k ? k.quotePriceUsd * 1_000_000 : 0.0001);
-  const dailyAPY = userHoldingValue > 0 ? (dailyReward * quotePrice / userHoldingValue) * 365 * 100 : 0;
-  const apy = Math.max(0, dailyAPY);
+  // APY: (annual reward USD / user holding USD) × 100
+  const userHoldingValue = holdNum * quotePrice;
+  const apy = userHoldingValue > 0
+    ? (annualReward * quotePrice / userHoldingValue) * 100
+    : 0;
 
   const fmtT = (n: number) => {
     if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
@@ -94,6 +86,8 @@ export const EarningsCalculator: React.FC = () => {
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
   const fmtC = (n: number) => new Intl.NumberFormat('en-US').format(n);
+
+  const fmtPct = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 6 }) + '%';
 
   const PRESETS = ['1', '5', '10', '50', '100', '500', '1000'];
 
@@ -190,39 +184,29 @@ export const EarningsCalculator: React.FC = () => {
               ))}
             </div>
 
-            {/* Min hold warning */}
+            {/* Supply stats */}
             {holdNum > 0 && (
-              <div style={{
-                padding: '10px 14px',
-                background: 'rgba(232,160,48,0.06)',
-                border: '1px solid rgba(232,160,48,0.2)',
-                borderRadius: 4,
-                fontSize: 11,
-                color: userHoldingValue >= 20 ? 'var(--green)' : 'var(--amber)',
-                fontFamily: 'var(--font-mono)',
-                marginBottom: 16,
-              }}>
-                {userHoldingValue >= 20
-                  ? `✓ Wallet value ${fmtUSD(userHoldingValue)} — qualifies for rewards`
-                  : `⚠ Min ${fmtUSD(20)} wallet value required to receive $FARTCOIN payouts`}
-              </div>
-            )}
-
-            {/* APY display */}
-            {holdNum > 0 && apy > 0 && (
-              <div style={{
-                padding: '10px 14px',
-                background: 'rgba(62,207,106,0.06)',
-                border: '1px solid rgba(62,207,106,0.2)',
-                borderRadius: 4,
-                fontSize: 11,
-                color: 'var(--green)',
-                fontFamily: 'var(--font-mono)',
-                marginBottom: 16,
-              }}>
-                <span style={{ color: 'var(--text-muted)' }}>Est. APY: </span>
-                {apy > 10000 ? `${(apy / 1000).toFixed(0)}K%` : `${apy.toFixed(0)}%`}
-                <span style={{ color: 'var(--text-muted)', marginLeft: 8 }}>based on current distribution rate</span>
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 10, marginBottom: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'var(--bg-raised)', borderRadius: 4, border: '1px solid var(--border-dim)' }}>
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.08em' }}>Supply</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-bright)', fontFamily: 'var(--font-mono)' }}>
+                    {holdNum.toLocaleString('en-US')} FARTCAT
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'var(--bg-raised)', borderRadius: 4, border: '1px solid var(--border-dim)' }}>
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.08em' }}>% of Supply</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--amber)', fontFamily: 'var(--font-mono)' }}>
+                    {fmtPct(pctSupply)}
+                  </span>
+                </div>
+                {apy > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'rgba(62,207,106,0.06)', borderRadius: 4, border: '1px solid rgba(62,207,106,0.2)' }}>
+                    <span style={{ fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.08em' }}>Est. APY</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--green)', fontFamily: 'var(--font-mono)' }}>
+                      {apy > 10000 ? `${(apy / 1000).toFixed(0)}K%` : `${apy.toFixed(0)}%`}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
 
@@ -265,7 +249,7 @@ export const EarningsCalculator: React.FC = () => {
                   </div>
                 ))}
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.6, marginTop: 4 }}>
-                  * Estimates based on StonkFun actual distribution rate. Earnings vary with trading volume. Holdings must exceed {fmtUSD(20)} to qualify. Not financial advice.
+                  * Estimates based on StonkFun distribution rate. Earnings vary with trading volume. Holdings must exceed {fmtUSD(20)} to qualify. Not financial advice.
                 </div>
               </div>
             ) : (
