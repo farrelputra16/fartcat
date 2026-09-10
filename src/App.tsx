@@ -4,6 +4,7 @@ import { ScanlineOverlay } from './components/ScanlineOverlay';
 import { NavBar } from './components/NavBar';
 import { Hero } from './components/Hero';
 import { EarningsCalculator } from './components/EarningsCalculator';
+import { SocialProof } from './components/SocialProof';
 import { About } from './components/About';
 import { LiveStats } from './components/LiveStats';
 import { Rewards } from './components/Rewards';
@@ -38,6 +39,7 @@ const App: React.FC = () => {
         <main>
           <Hero />
           <EarningsCalculator />
+          <SocialProof />
           <About />
           <LiveStats />
           <Rewards />
