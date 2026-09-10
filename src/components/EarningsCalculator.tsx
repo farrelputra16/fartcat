@@ -20,8 +20,14 @@ interface Stats {
   minPayoutUsd: number;
 }
 
+// StonkFun mechanics: 3% tax on every $FARTCAT transfer
+// ~0.5% of the tax is distributed pro-rata to $FARTCOIN holders
+// Formula: userDailyReward = holdNum × (distributedTokens / holderCount) / daysLive × 0.5%
+// where distributedTokens/holderCount is the average reward per holder (normalized)
+
 export const EarningsCalculator: React.FC = () => {
-  const [holdings, setHoldings] = useState('10');
+  // holdings stored as raw token count
+  const [holdings, setHoldings] = useState('10000000'); // default 10M
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [holders, setHolders] = useState<number | null>(null);
@@ -55,26 +61,18 @@ export const EarningsCalculator: React.FC = () => {
   // % of total supply
   const pctSupply = (holdNum / FARTCAT_SUPPLY) * 100;
 
-  // StonkFun: 3% tax → ~0.5% net to holders pro-rata
-  // avgTokensPerHolder = total rewards to average holder (normalized metric from StonkFun data)
+  // StonkFun reward calculation
   const avgTokensPerHolder = k && k.holderCount > 0
     ? k.distributedTokens / k.holderCount
     : 0;
-
-  // userDailyReward = user's holdings × (avgTokensPerHolder/daysLive) × 0.5%
-  const holderShareRate = 0.005;
+  const holderShareRate = 0.005; // 0.5% net from 3% tax
   const dailyReward = holdNum * (avgTokensPerHolder / daysLive) * holderShareRate;
   const weeklyReward = dailyReward * 7;
   const monthlyReward = dailyReward * 30;
   const annualReward = dailyReward * 365;
 
-  // APY: (annual reward USD / user holding USD) × 100
-  const userHoldingValue = holdNum * quotePrice;
-  const apy = userHoldingValue > 0
-    ? (annualReward * quotePrice / userHoldingValue) * 100
-    : 0;
-
-  const fmtT = (n: number) => {
+  // Format helpers
+  const fmtToken = (n: number) => {
     if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
     if (n >= 1_000) return (n / 1_000).toFixed(2) + 'K';
     if (n >= 1) return n.toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -82,14 +80,28 @@ export const EarningsCalculator: React.FC = () => {
     return n.toExponential(2);
   };
 
+  // Display: show supply in millions
+  const fmtHoldings = (n: number) => {
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
+    if (n >= 1_000) return (n / 1_000).toFixed(2) + 'K';
+    return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  };
+
   const fmtUSD = (n: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
   const fmtC = (n: number) => new Intl.NumberFormat('en-US').format(n);
+  const fmtPct = (n: number) => n.toFixed(6) + '%';
 
-  const fmtPct = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 6 }) + '%';
-
-  const PRESETS = ['1', '5', '10', '50', '100', '500', '1000'];
+  // Presets in raw token amounts
+  const PRESETS = [
+    { label: '1M', value: '1000000' },
+    { label: '5M', value: '5000000' },
+    { label: '10M', value: '10000000' },
+    { label: '50M', value: '50000000' },
+    { label: '100M', value: '100000000' },
+    { label: '500M', value: '500000000' },
+  ];
 
   return (
     <section id="calculator" ref={ref} className="section" style={{ background: 'var(--bg-base)', borderTop: '1px solid var(--border-dim)' }}>
@@ -169,17 +181,17 @@ export const EarningsCalculator: React.FC = () => {
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' as const, marginBottom: 24 }}>
               {PRESETS.map(p => (
                 <button
-                  key={p}
-                  onClick={() => setHoldings(p)}
+                  key={p.label}
+                  onClick={() => setHoldings(p.value)}
                   style={{
                     padding: '5px 14px', fontSize: 12, fontFamily: 'var(--font-mono)',
-                    border: `1px solid ${holdings === p ? 'var(--green)' : 'var(--border-mid)'}`,
-                    background: holdings === p ? 'rgba(62,207,106,0.1)' : 'transparent',
-                    color: holdings === p ? 'var(--green)' : 'var(--text-dim)',
+                    border: `1px solid ${holdings === p.value ? 'var(--green)' : 'var(--border-mid)'}`,
+                    background: holdings === p.value ? 'rgba(62,207,106,0.1)' : 'transparent',
+                    color: holdings === p.value ? 'var(--green)' : 'var(--text-dim)',
                     borderRadius: 3, cursor: 'pointer', transition: 'all 0.15s',
                   }}
                 >
-                  {p}M
+                  {p.label}
                 </button>
               ))}
             </div>
@@ -190,7 +202,7 @@ export const EarningsCalculator: React.FC = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'var(--bg-raised)', borderRadius: 4, border: '1px solid var(--border-dim)' }}>
                   <span style={{ fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.08em' }}>Supply</span>
                   <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-bright)', fontFamily: 'var(--font-mono)' }}>
-                    {holdNum.toLocaleString('en-US')} FARTCAT
+                    {fmtHoldings(holdNum)} FARTCAT
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'var(--bg-raised)', borderRadius: 4, border: '1px solid var(--border-dim)' }}>
@@ -199,14 +211,6 @@ export const EarningsCalculator: React.FC = () => {
                     {fmtPct(pctSupply)}
                   </span>
                 </div>
-                {apy > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'rgba(62,207,106,0.06)', borderRadius: 4, border: '1px solid rgba(62,207,106,0.2)' }}>
-                    <span style={{ fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.08em' }}>Est. APY</span>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--green)', fontFamily: 'var(--font-mono)' }}>
-                      {apy > 10000 ? `${(apy / 1000).toFixed(0)}K%` : `${apy.toFixed(0)}%`}
-                    </span>
-                  </div>
-                )}
               </div>
             )}
 
@@ -224,10 +228,10 @@ export const EarningsCalculator: React.FC = () => {
             {holdNum > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 12 }}>
                 {[
-                  { label: 'Per Day', token: fmtT(dailyReward), usd: fmtUSD(dailyReward * quotePrice), primary: true },
-                  { label: 'Per Week', token: fmtT(weeklyReward), usd: fmtUSD(weeklyReward * quotePrice), primary: false },
-                  { label: 'Per Month', token: fmtT(monthlyReward), usd: fmtUSD(monthlyReward * quotePrice), primary: false },
-                  { label: 'Per Year', token: fmtT(annualReward), usd: fmtUSD(annualReward * quotePrice), primary: false },
+                  { label: 'Per Day', token: fmtToken(dailyReward), usd: fmtUSD(dailyReward * quotePrice), primary: true },
+                  { label: 'Per Week', token: fmtToken(weeklyReward), usd: fmtUSD(weeklyReward * quotePrice), primary: false },
+                  { label: 'Per Month', token: fmtToken(monthlyReward), usd: fmtUSD(monthlyReward * quotePrice), primary: false },
+                  { label: 'Per Year', token: fmtToken(annualReward), usd: fmtUSD(annualReward * quotePrice), primary: false },
                 ].map((row, i) => (
                   <div key={i} style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -249,7 +253,7 @@ export const EarningsCalculator: React.FC = () => {
                   </div>
                 ))}
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.6, marginTop: 4 }}>
-                  * Estimates based on StonkFun distribution rate. Earnings vary with trading volume. Holdings must exceed {fmtUSD(20)} to qualify. Not financial advice.
+                  * Estimates based on StonkFun distribution rate. Earnings vary with trading volume. Not financial advice.
                 </div>
               </div>
             ) : (
