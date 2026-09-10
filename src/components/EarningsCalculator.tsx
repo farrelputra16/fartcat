@@ -61,12 +61,14 @@ export const EarningsCalculator: React.FC = () => {
   const pctSupply = (holdNum / FARTCAT_SUPPLY) * 100;
 
   // StonkFun reward calculation
-  // avgTokensPerHolder = total rewards distributed to average holder
-  const avgTokensPerHolder = k && k.holderCount > 0
-    ? k.distributedTokens / k.holderCount
-    : 0;
+  // Correct formula:
+  //   userPct = holdNum / FARTCAT_SUPPLY (user's proportional share)
+  //   dailyDist = distributedTokens / daysLive (actual daily FARTCOIN distributed)
+  //   userDailyReward = userPct × dailyDist × holderShareRate (0.5%)
+  const userPct = holdNum / FARTCAT_SUPPLY;
+  const dailyDist = k && daysLive > 0 ? k.distributedTokens / daysLive : 0;
   const holderShareRate = 0.005; // 0.5% net from 3% tax
-  const dailyReward = holdNum * (avgTokensPerHolder / daysLive) * holderShareRate;
+  const dailyReward = userPct * dailyDist * holderShareRate;
   const weeklyReward = dailyReward * 7;
   const monthlyReward = dailyReward * 30;
   const annualReward = dailyReward * 365;
