@@ -1,4 +1,6 @@
-<!doctype html>
+const fs = require('fs');
+
+const entry = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -21,10 +23,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-pXtX5us2.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CQZJcNM7.css">
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+`;
+
+fs.writeFileSync('index.html', entry);
